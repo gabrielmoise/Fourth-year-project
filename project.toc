@@ -10,20 +10,25 @@
 \contentsline {subsection}{2.1. Relational Database Schema}{8}{subsection*.7}%
 \contentsline {subsection}{2.2. First-order Logic}{8}{subsection*.8}%
 \contentsline {subsection}{2.3. Queries}{9}{subsection*.9}%
-\contentsline {subsection}{2.4. Dependencies}{11}{subsection*.10}%
+\contentsline {subsection}{2.4. Dependencies}{10}{subsection*.10}%
 \contentsline {subsection}{2.5. Open World Query Answering}{12}{subsection*.11}%
-\contentsline {subsection}{2.6. Forward Chaining: The Chase}{13}{subsection*.12}%
-\contentsline {section}{3. Chase Entailment for LTGDs}{16}{section*.13}%
-\contentsline {subsection}{3.1. Tree-like Property}{16}{subsection*.14}%
-\contentsline {subsection}{3.2. Automata over Infinite Trees: 1-way deterministic Buchi}{19}{subsection*.15}%
-\contentsline {subsection}{3.3. Automata for the chase}{20}{subsection*.16}%
-\contentsline {subsection}{3.4. Automata over Infinite Trees: 2-way alternating Buchi}{21}{subsection*.17}%
-\contentsline {subsection}{3.5. Automata for single-headed LTGDs}{23}{subsection*.18}%
-\contentsline {subsection}{3.6. Time complexity}{24}{subsection*.19}%
-\contentsline {section}{4. Equivalences for Chase and CQs}{25}{section*.20}%
-\contentsline {subsection}{4.1. Definitions}{25}{subsection*.21}%
-\contentsline {subsection}{4.2. Implications}{25}{subsection*.22}%
-\contentsline {subsection}{4.3. Decidability for equivalences of LTGD sets}{30}{subsection*.23}%
-\contentsline {subsection}{4.4. Query entailment for the chase}{31}{subsection*.24}%
-\contentsline {subsection}{4.5. Weaker notions of CQ-equivalence}{33}{subsection*.25}%
-\contentsline {section}{5. Conclusions}{36}{section*.26}%
+\contentsline {subsection}{2.6. Forward Chaining: The Chase}{12}{subsection*.12}%
+\contentsline {subsection}{2.7. Tree-like Property of the Chase}{15}{subsection*.13}%
+\contentsline {section}{3. Equivalences for the Chase and CQs}{18}{section*.14}%
+\contentsline {subsection}{3.1. Definitions}{18}{subsection*.15}%
+\contentsline {subsection}{3.2. Implications}{18}{subsection*.16}%
+\contentsline {subsection}{3.3. Decidability for Equivalences}{23}{subsection*.17}%
+\contentsline {section}{4. Chase Entailment for LTGDs}{25}{section*.18}%
+\contentsline {subsection}{4.1. Automata over Infinite Trees: 1-way deterministic Buchi}{25}{subsection*.19}%
+\contentsline {subsection}{4.2. Automata for the Chase}{26}{subsection*.20}%
+\contentsline {subsection}{4.3. Automata over Infinite Trees: 2-way alternating Buchi}{27}{subsection*.21}%
+\contentsline {subsection}{4.4. Automata for single-headed LTGDs}{29}{subsection*.22}%
+\contentsline {subsection}{4.5. Time Complexity}{30}{subsection*.23}%
+\contentsline {subsection}{4.6. Relation to Chase Compatibility}{30}{subsection*.24}%
+\contentsline {section}{5. Weaker notions of CQ-equivalence}{31}{section*.25}%
+\contentsline {subsection}{5.1. Query entailment for the chase}{31}{subsection*.26}%
+\contentsline {subsection}{5.2. Weaker notions of CQ-equivalence}{33}{subsection*.27}%
+\contentsline {section}{6. Conclusions}{35}{section*.28}%
+\contentsline {subsection}{6.1. Summary}{35}{subsection*.29}%
+\contentsline {subsection}{6.2. Related work}{35}{subsection*.30}%
+\contentsline {subsection}{6.3. Future directions}{35}{subsection*.31}%
