@@ -497,12 +497,14 @@ squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size
 
 \subsection{3.3. Decidability for Equivalences}
 \textbf{(A) Logical equivalence}:\newline
-In \cite{decidable} we are introduced to a fragment of first-order logic called the \textit{Guarded Fragment}, where the formulas are of the form:
+%In \cite{decidable} we are introduced 
+%michael: \cite{decidable} did not introduce this logic
+We will go through a fragment of first-order logic called the \textit{Guarded Fragment}, where the formulas are of the form:
 \begin{gather*}
 \varphi(\vec{x}) \hspace{0.1em} ::= True \hspace{0.1em} | \hspace{0.1em} False \hspace{0.1em} | \hspace{0.1em} R(\vec{t}) \hspace{0.3em} |\hspace{0.3em} t_{i} = t_{j} \hspace{0.3em}| \hspace{0.3em}\varphi \wedge \varphi \hspace{0.3em}| \hspace{0.3em}\varphi \vee \varphi \hspace{0.3em}| \hspace{0.3em}\neg \varphi \hspace{0.3em}| \hspace{0.3em}\forall \vec{y} \hspace{0.25em} R(\vec{x}, \vec{y}) \rightarrow \varphi \hspace{0.3em}|\hspace{0.3em} \exists \vec{y} \hspace{0.25em} R(\vec{x}, \vec{y}) \wedge \varphi\hspace{0.3em}
 \end{gather*}
 In the existential and universal cases, the free variables of the inner $\varphi$ are required to be from $\vec{x}$ $\cup$ $\vec{y}$ and the R($\vec{x}$,$\vec{y}$) atom is called the \textit{guard atom}.\newline
-It has been proven that we can construct automata for these formulas in order to decide their satisfiability. With this, we can check if two sets of GF formulas are logically equivalent. We can use this approach for GTGD formulas, even when they are not in GF:
+It has been proven that we can construct automata for these formulas in order to decide their satisfiability: see, for example, \cite{decidable}. With this, we can check if two sets of GF formulas are logically equivalent. We can use this approach for GTGD formulas, even when they are not in GF:
 \begin{center}
 $\varphi$ = $\forall$x, y R(x,y) $\rightarrow$ $\exists$ z S(x,z) $\wedge$ T(y,z)
 \end{center}
