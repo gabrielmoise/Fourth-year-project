@@ -102,8 +102,7 @@
 \justifying
 
 \section{Abstract}
-SHOULD BE A SHORT SUMMARY OF WHAT THE THESIS IS ABOUT, like an abbreviated version of the intro: quickly mentioning what schema mappings, then schema mapping equivalence, then what kinds of problems you study
-
+Schema mappings are high-level specifications that describe how to map information from a source schema to a target schema. Schema mapping equivalence refers to situations where a mapping leads to the same output, given a fixed input. The project will discuss methods to check this equivalence, together with results about decidability on the checking procedure.\newline
 The majority of computer science areas nowadays deal extensively with different forms of finite relational structures, usually with some form of constraints attached. In the databases domain, we can view the usual relations (tables) as structures, being constrained by dependencies, which impose relationships on the data that can appear in instances. In graph theory, we can view graphs as structures, and the constraints can generate the problems that concern us, for example k-coloring. In this project, we will try to formalize precisely the relational structures and constraints. We will cover a very researched class of constraints, namely tuple-generating dependencies, examining their behavior with respect to database instances. We will also examine how we can decide equivalence of schemas, by imposing conditions on the form of the dependencies.
 
 \section{Acknowledgements}
@@ -118,7 +117,7 @@ Many thanks to my supervisor Michael Benedikt for coming up with the idea of the
 \newpage
 
 \section{1. Introduction}
-Schema mappings are high-level specifications that describe how to map information from a source schema to a target schema. Logical constraints can be used to represent these relationships, telling how the target must relate to the source. Schema mappings are a crucial building block in several areas of database research, including data exchange\cite{dataexchange}, where we start with data structured under a source schema and we aim to create a target schema that best reflects the input data, and data integration\cite{dataintegration}, where we provide a unified view of all the data from different sources.
+Logical constraints can be used to represent these relationships, telling how the target must relate to the source. Schema mappings are a crucial building block in several areas of database research, including data exchange\cite{dataexchange}, where we start with data structured under a source schema and we aim to create a target schema that best reflects the input data, and data integration\cite{dataintegration}, where we provide a unified view of all the data from different sources.
 
 \subsection{1.1. Motivation}
 In order to describe the relationship between source and target schemas, we use sets of constraints. Naturally, there has been a lot of research on manipulating schema mappings (with operations such as inverse and composition), but this project is focused on the optimization aspect. This consists of the removal of redundant constraints, an operation which can speed up drastically the computation of our target instances. \newline
@@ -497,8 +496,6 @@ squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size
 
 \subsection{3.3. Decidability for Equivalences}
 \textbf{(A) Logical equivalence}:\newline
-%In \cite{decidable} we are introduced 
-%michael: \cite{decidable} did not introduce this logic
 We will go through a fragment of first-order logic called the \textit{Guarded Fragment}, where the formulas are of the form:
 \begin{gather*}
 \varphi(\vec{x}) \hspace{0.1em} ::= True \hspace{0.1em} | \hspace{0.1em} False \hspace{0.1em} | \hspace{0.1em} R(\vec{t}) \hspace{0.3em} |\hspace{0.3em} t_{i} = t_{j} \hspace{0.3em}| \hspace{0.3em}\varphi \wedge \varphi \hspace{0.3em}| \hspace{0.3em}\varphi \vee \varphi \hspace{0.3em}| \hspace{0.3em}\neg \varphi \hspace{0.3em}| \hspace{0.3em}\forall \vec{y} \hspace{0.25em} R(\vec{x}, \vec{y}) \rightarrow \varphi \hspace{0.3em}|\hspace{0.3em} \exists \vec{y} \hspace{0.25em} R(\vec{x}, \vec{y}) \wedge \varphi\hspace{0.3em}
