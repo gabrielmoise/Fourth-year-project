@@ -102,8 +102,22 @@
 \justifying
 
 \section{Abstract}
-Schema mappings are high-level specifications that describe how to map information from a source schema to a target schema. Schema mapping equivalence refers to situations where a mapping leads to the same output, given a fixed input. The project will discuss methods to check this equivalence, together with results about decidability on the checking procedure.\newline
-The majority of computer science areas nowadays deal extensively with different forms of finite relational structures, usually with some form of constraints attached. In the databases domain, we can view the usual relations (tables) as structures, being constrained by dependencies, which impose relationships on the data that can appear in instances. In graph theory, we can view graphs as structures, and the constraints can generate the problems that concern us, for example k-coloring. In this project, we will try to formalize precisely the relational structures and constraints. We will cover a very researched class of constraints, namely tuple-generating dependencies, examining their behavior with respect to database instances. We will also examine how we can decide equivalence of schemas, by imposing conditions on the form of the dependencies.
+Schema mappings are high-level specifications that describe how to map information from a source schema to a target schema. Schema mapping equivalence refers to situations where two mappings lead to the same output, given a fixed input. 
+%The project will discuss methods to check this equivalence, together with results about decidability on the checking procedure.\newline
+%michael: results are about expressiveness and decidability, not "checking" vs decidability 
+The majority of computer science areas nowadays deal extensively with different forms of finite relational structures, usually with some form of constraints attached. In the databases domain, we can view the usual relations (tables) as structures, being constrained by dependencies, which impose relationships on the data that can appear in instances. In graph theory, we can view graphs as structures, and the constraints can specify properties of interest to us, for example k-coloring. \michael{It is not obvious how to view $k$-coloring as a TGD!}
+In this project,
+%we will try to formalize precisely the relational structures and constraints.
+%michael: formalizing relational structures and constraints is not a contribution of the the these
+we will deal with  a well-researched class of constraints, namely tuple-generating dependencies (TGDs).
+An advantage of TGDs is that they can be used as schema mappings, since they describe a property a target instance
+has to satisfy to be a valid transformation of a source
+%michael: connect constraints to schema mappings
+%, examining their behavior with respect to database instances. 
+%michael: This makes it sounds like their two goals of the thesis: examining behavior (very vague) and the deciding 
+%equivalence. We agreed that the thesis is about equivalence, with results about expressiveness and then about decidability
+We will examine the expressiveness of various notions of schema equivalence. Then we provide conditions
+under which we can decide equivalence of schemas.
 
 \section{Acknowledgements}
 Many thanks to my supervisor Michael Benedikt for coming up with the idea of the project, for all the help and advice provided, and for constantly bringing up new ideas and methods to solve the problems at hand. His papers and lecture notes constituted the basis for the work of this project, and his weekly meeting notes proved to be essential in progressing with the contributions.
