@@ -12,7 +12,7 @@
 \BOOKMARK [2][-]{subsection*.10}{2.4. Dependencies}{section*.6}% 12
 \BOOKMARK [2][-]{subsection*.11}{2.5. Open World Query Answering}{section*.6}% 13
 \BOOKMARK [2][-]{subsection*.12}{2.6. Forward Chaining: The Chase}{section*.6}% 14
-\BOOKMARK [2][-]{subsection*.13}{2.7. Tree-like Property of the Chase}{section*.6}% 15
+\BOOKMARK [2][-]{subsection*.13}{2.7. Tree-like Property of the Chase on LTGDs}{section*.6}% 15
 \BOOKMARK [1][-]{section*.14}{3. Equivalences for the Chase and CQs}{}% 16
 \BOOKMARK [2][-]{subsection*.15}{3.1. Definitions}{section*.14}% 17
 \BOOKMARK [2][-]{subsection*.16}{3.2. Implications}{section*.14}% 18
@@ -24,7 +24,7 @@
 \BOOKMARK [2][-]{subsection*.22}{4.4. Automata for single-headed LTGDs}{section*.18}% 24
 \BOOKMARK [2][-]{subsection*.23}{4.5. Time Complexity}{section*.18}% 25
 \BOOKMARK [2][-]{subsection*.24}{4.6. Relation to Chase Compatibility}{section*.18}% 26
-\BOOKMARK [1][-]{section*.25}{5. Weaker notions of CQ-equivalence}{}% 27
+\BOOKMARK [1][-]{section*.25}{5. CQ-equivalence}{}% 27
 \BOOKMARK [2][-]{subsection*.26}{5.1. Query entailment for the chase}{section*.25}% 28
 \BOOKMARK [2][-]{subsection*.27}{5.2. Weaker notions of CQ-equivalence}{section*.25}% 29
 \BOOKMARK [1][-]{section*.28}{6. Conclusions}{}% 30

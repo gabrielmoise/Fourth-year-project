@@ -7,7 +7,7 @@
 \usepackage {titlesec}
 \usepackage{setspace} \doublespacing
 
-\usepackage [margin=1.2in] {geometry}
+\usepackage [margin=3cm] {geometry}
 \usepackage {amsmath}
 \usepackage[T1]{fontenc}
 \usepackage{tabto}
@@ -89,7 +89,7 @@
 		4\textsuperscript{th} year project report for candidate 1035522\\
         Honour School of Computer Science - Part C\\
         Submitted as part of an MCompSci in Computer Science\\
-		Trinity term, 2022\\ \footnote{Word count: 9364}	
+		Trinity term, 2022\\ \footnote{Word count: 9382}	
 		}
 
 \maketitle
@@ -103,24 +103,13 @@
 
 \section{Abstract}
 Schema mappings are high-level specifications that describe how to map information from a source schema to a target schema. Schema mapping equivalence refers to situations where two mappings lead to the same output, given a fixed input. 
-%The project will discuss methods to check this equivalence, together with results about decidability on the checking procedure.\newline
-%michael: results are about expressiveness and decidability, not "checking" vs decidability 
-The majority of computer science areas nowadays deal extensively with different forms of finite relational structures, usually with some form of constraints attached. In the databases domain, we can view the usual relations (tables) as structures, being constrained by dependencies, which impose relationships on the data that can appear in instances. In graph theory, we can view graphs as structures, and the constraints can specify properties of interest to us, for example k-coloring. \michael{It is not obvious how to view $k$-coloring as a TGD!}
-In this project,
-%we will try to formalize precisely the relational structures and constraints.
-%michael: formalizing relational structures and constraints is not a contribution of the the these
-we will deal with  a well-researched class of constraints, namely tuple-generating dependencies (TGDs).
-An advantage of TGDs is that they can be used as schema mappings, since they describe a property a target instance
-has to satisfy to be a valid transformation of a source
-%michael: connect constraints to schema mappings
-%, examining their behavior with respect to database instances. 
-%michael: This makes it sounds like their two goals of the thesis: examining behavior (very vague) and the deciding 
-%equivalence. We agreed that the thesis is about equivalence, with results about expressiveness and then about decidability
-We will examine the expressiveness of various notions of schema equivalence. Then we provide conditions
-under which we can decide equivalence of schemas.
+The majority of computer science areas nowadays deal extensively with different forms of finite relational structures, usually with some form of constraints attached. In the domain of databases, we can view the usual relations (tables) as structures, being constrained by dependencies, which impose relationships on the data that can appear in instances. In graph theory, we can view graphs as structures, and the constraints can specify properties of interest to us, for example, k-coloring. 
+In this project, we will deal with a well-researched class of constraints, namely tuple-generating dependencies (TGDs).
+An advantage of TGDs is that they can be used as schema mappings since they describe a property a target instance
+has to satisfy to be a valid transformation of a source. We will examine the expressiveness of various notions of schema equivalence. Then we provide conditions under which we can decide the equivalence of schemas.
 
 \section{Acknowledgements}
-Many thanks to my supervisor Michael Benedikt for coming up with the idea of the project, for all the help and advice provided, and for constantly bringing up new ideas and methods to solve the problems at hand. His papers and lecture notes constituted the basis for the work of this project, and his weekly meeting notes proved to be essential in progressing with the contributions.
+Many thanks to my supervisor Michael Benedikt for coming up with the idea for the project, for all the help and advice provided, and for constantly bringing up new ideas and methods to solve the problems at hand. His papers and lecture notes constituted the basis for the work of this project, and his weekly meeting notes proved to be essential in progressing with the contributions.
 
 \newpage
 
@@ -131,23 +120,21 @@ Many thanks to my supervisor Michael Benedikt for coming up with the idea of the
 \newpage
 
 \section{1. Introduction}
-\michael{Something very wrong here -- maybe a cut and paste error. What are "these relationships"? You 
-need to describe the notion of relationship you are interested in, then say that logical constraints can describe them}
-Logical constraints can be used to represent these relationships, telling how the target must relate to the source. Schema mappings are a crucial building block in several areas of database research, including data exchange\cite{dataexchange}, where we start with data structured under a source schema and we aim to create a target schema that best reflects the input data, and data integration\cite{dataintegration}, where we provide a unified view of all the data from different sources.
+Logical constraints can be used to represent schema mappings, telling how the target must relate to the source. Schema mappings are a crucial building block in several areas of database research, including data exchange \cite{dataexchange}, where we start with data structured under a source schema and we aim to create a target schema that best reflects the input data, and data integration \cite{dataintegration}, where we provide a unified view of all the data from different sources.
 
 \subsection{1.1. Motivation}
-In order to describe the relationship between source and target schemas, we use sets of constraints. Naturally, there has been a lot of research on manipulating schema mappings (with operations such as inverse and composition), but this project is focused on the optimization aspect. This consists of the removal of redundant constraints, an operation which can speed up drastically the computation of our target instances. \newline
+In order to describe the relationship between source and target schemas, we use sets of constraints. Naturally, there has been a lot of research on manipulating schema mappings (with operations such as inverse and composition), but this project is focused on the optimization aspect. This consists of the removal of redundant constraints, an operation that can speed up drastically the computation of our target instances. \newline
 \textbf{Example 1}: Starting with source database D$_{0}$ = $\{$R(1,2)$\}$ and constraints\newline $\Sigma$ = $\{$R(x,y) $\rightarrow$ S(y,x), S(x,y) $\rightarrow$ R(y,x)$\}$, we would obtain the target instance D$_{0}$ $\cup$ $\{$S(2,1)$\}$, but we can see that the second constraint in $\Sigma$ does not bring any contribution to this, so we could get rid of it.\newline
-Using this optimization procedure, we ultimately want to tell if schemas are equivalent (different notions of equivalence will be discussed later). If we possess a repository of schemas which already have some established equivalences between them, this makes querying them more efficient. Consequently, it is important to test any new equivalences that would appear from updating this repository. 
+Using this optimization procedure, we ultimately want to tell if schemas are equivalent (different notions of equivalence will be discussed later). If we possess a repository of schemas that already have some established equivalences between them, this makes querying them more efficient. Consequently, it is important to test any new equivalences that would appear from updating this repository. 
 
 \subsection{1.2. Contributions}
-The main goal of this project is to study the relationship between types of equivalences of schema mappings. We will also prove decidability of equivalence testing for particular (and very used in the literature) classes of constraints. This will be done using automata over trees that encode the source instances. Where this decidability has already been proven, our aim is to obtain a better time/memory complexity. In the cases where undecidability has been established, we wish to restrict the class of constraints until the problem becomes decidable. 
+The main goal of this project is to study the relationship between types of equivalences of schema mappings. We will also prove the decidability of equivalence testing for particular (and very used in the literature) classes of constraints. This will be done using automata over trees that encode the source instances. Where this decidability has already been proven, we aim to obtain a better time/memory complexity. In the cases where undecidability has been established, we wish to restrict the class of constraints until the problem becomes decidable. 
 
 \subsection{1.3. Challenges}
-The first parts of this project involved getting familiar with the already existing related work, most of it treating similar problems with very different approaches. A crucial concept throughout the project will be the chase procedure, which has been defined in many places and in various ways, therefore trying to encode its structure using graph theory and automata was a big stepping stone. Another challenge arose from the introduction of two new types of equivalences between schemas and our attempt to fit them in the already existing picture of schema equivalences.
+The first part of this project involved getting familiar with the already existing related work, most of it treating similar problems with very different approaches. A crucial concept throughout the project will be the chase procedure, which has been defined in many places and in various ways, therefore trying to encode its structure using graph theory and automata was a big stepping stone. Another challenge arose from the introduction of two new types of equivalences between schemas and our attempt to fit them in the already existing picture of schema equivalences.
 
 \subsection{1.4. Structure of the Report}
-The rest of the report is structured as follows: an introduction of the notations and concepts that will be constantly used throughout the project is presented in Section 2.  In Section 3 we introduce the types of equivalences of schema mappings that will be studied, together with how they are related and with decidability results. Section 4 will introduce an approach based on automata which will prove an important result from Section 3. Section 5 will relax one notion of equivalence and will contain decidability results as well. Finally, in Section 6, we present the conclusions, related work and future directions for this project. 
+The rest of the report is structured as follows: an introduction of the notations and concepts that will be constantly used throughout the project is presented in Section 2.  In Section 3 we introduce the types of equivalences of schema mappings that will be studied, together with how they are related and with decidability results. Section 4 will introduce an approach based on automata which will prove an important result from Section 3. Section 5 will relax one notion of equivalence and will contain decidability results as well. Finally, in Section 6, we present the conclusions, related work, and future directions for this project. 
 
 \newpage
 
@@ -228,14 +215,14 @@ A \textit{tuple-generating dependency} (TGD) $\varphi$ has the form:
 \forall \vec{x} \hspace{0.25em}\vec{y} \hspace{0.25em}\rho(\vec{x}, \hspace{0.25em}\vec{y}) \rightarrow \exists \vec{z} \hspace{0.25em}\gamma(\vec{y}, \hspace{0.25em}\vec{z})
 \end{gather}
 where $\rho$ and $\gamma$ are conjunctions of atoms with arguments from $\vec{x}$ and $\vec{y}$, respectively $\vec{y}$ and $\vec{z}$. Since $\vec{y}$ appears in both sides, these variables will be called \textit{exported variables}. We will refer to $\rho(\vec{x}, \hspace{0.25em} \vec{y})$ as the \textit{body} of the TGD and to $\gamma(\vec{y}, \hspace{0.25em}\vec{z})$ as the \textit{head}.\newline
-The intuition behind the "tuple-generating" aspect is that when we start with a database instance D$_{0}$ that does not initially satisfy a TGD $\varphi$ (say we have $\rho(\vec{x}, \hspace{0.25em} \vec{y})$ satisfied, but no $\vec{z}$ such that $\gamma(\vec{y}, \hspace{0.25em}\vec{z})$), we can extend $D_{0}$ with new facts (mentioning new symbols), until we satisfy $\varphi$\footnote{the semantics for TGDs are inherited from first-order logic.}.\newline
-\textbf{Example 5}: Consider a database instance $D_{0}$ = $\{$R(0,1), R(1,2), S(0,3)$\}$. The TGD\newline $\varphi_{1}$ = $\forall$x, y S(x,y) $\rightarrow$ $\exists$ z R(x,z) holds, but the TGD $\varphi_{2}$ = $\forall$x, y R(x,y) $\rightarrow$ $\exists$ z S(x,z) does not, because there is no z for x = 1, y = 2 such that S(1,z).\newline
+The intuition behind the "tuple-generating" aspect is that when we start with a database instance D$_{0}$ that does not initially satisfy a TGD $\varphi$ (say we have $\rho(\vec{x}, \hspace{0.25em} \vec{y})$ satisfied, but no $\vec{z}$ such that $\gamma(\vec{y}, \hspace{0.25em}\vec{z})$), we can extend D$_{0}$ with new facts (mentioning new symbols), until we satisfy $\varphi$\footnote{the semantics for TGDs are inherited from first-order logic.}.\newline
+\textbf{Example 5}: Consider a database instance D$_{0}$ = $\{$R(0,1), R(1,2), S(0,3)$\}$. The TGD\newline $\varphi_{1}$ = $\forall$x, y S(x,y) $\rightarrow$ $\exists$ z R(x,z) holds, but the TGD $\varphi_{2}$ = $\forall$x, y R(x,y) $\rightarrow$ $\exists$ z S(x,z) does not, because there is no z for x = 1, y = 2 such that S(1,z).\newline
 A \textit{guarded tuple-generating dependency} (GTGD) has the form:
 \begin{gather*}
 \forall \vec{x} \hspace{0.25em}\vec{y} \hspace{0.25em}R(\vec{x}, \hspace{0.25em} \vec{y}) \wedge \rho(\vec{x}, \hspace{0.25em}\vec{y}) \rightarrow \exists \vec{z} \hspace{0.25em}\gamma(\vec{y}, \hspace{0.25em}\vec{z})
 \end{gather*}
 where R is a relation symbol that mentions all variables from $\vec{x}$ and $\vec{y}$ and is called the \textit{guard} of the constraint. In Example 5, both TGDs are guarded, but for instance the TGD $\varphi$ = $\forall$x, y, z R(x,y) $\wedge$ S(x,z) $\rightarrow$ $\exists$t R(t,x) is not.\newline
-A \textit{linear tuple-generating dependency} (LTGD) is a GTGD with only one relation symbol in the body\footnote{some books call it linear guarded TGD, but we can see that all LTGDs are trivially guarded.}:
+A \textit{linear tuple-generating dependency} (LTGD) is a GTGD with only one relation symbol in the body\footnote{some books call it linear guarded TGD, but we can see that all LTGDs are guarded.}:
 \begin{gather*}
 \forall \vec{x} \hspace{0.25em}\vec{y} \hspace{0.25em}R(\vec{x}, \hspace{0.25em} \vec{y}) \rightarrow \exists \vec{z} \hspace{0.25em}\gamma(\vec{y}, \hspace{0.25em}\vec{z})
 \end{gather*}
@@ -244,7 +231,7 @@ A \textit{schema mapping} M is defined by a triple $\langle$S, T, $\Sigma\rangle
 \subsection{2.5. Open World Query Answering}
 As we have seen, a database instance D$_{0}$ might not be consistent with respect to a set of dependencies $\Sigma$. A natural goal here is to see how to "extend" D$_{0}$ with facts in order for the newly formed instance to satisfy $\Sigma$.\newline
 D$^{'}_{0}$ is a \textit{super-instance} of D$_{0}$ if it contains all the facts from D$_{0}$.  Given instance D$_{0}$ and set of constraints $\Sigma$, a \textit{world} (also called \textit{model}) of D$_{0}$ and $\Sigma$ is a super-instance of D$_{0}$ that satisfies $\Sigma$. Given a query Q($\vec{x}$), a \textit{certain answer} to Q on D$_{0}$, $\Sigma$ is a homomorphism h such that the tuple h($\vec{x}$) is in every world of D$_{0}$ and $\Sigma$. \newline
-The \textit{Open World Query Answering} problem is to decide, given tuple $\vec{t}$, query Q, instance D$_{0}$ and set of constraints $\Sigma$, whether $\vec{t}$ is a certain answer to Q on D$_{0}$, $\Sigma$. There is a distinction between the constrained and unconstrained versions of this problem, depending if we only take into consideration the finite super-instances or not, respectively. A similar problem is to determine all certain answers of Q, given D$_{0}$ and $\Sigma$.\newline
+The \textit{Open World Query Answering} problem is to decide, given tuple $\vec{t}$, query Q, instance D$_{0}$ and set of constraints $\Sigma$, whether $\vec{t}$ is a certain answer to Q on D$_{0}$, $\Sigma$. There is a distinction between the constrained and unconstrained versions of this problem, depending on whether we only take into consideration the finite super-instances or not, respectively. A similar problem is to determine all certain answers of Q, given D$_{0}$ and $\Sigma$.\newline
 We will use the notation D$_{0}$ $\wedge$ $\Sigma$ $\vDash$ Q to indicate that Q holds in all possible worlds of D$_{0}$ and $\Sigma$, where Q is a Boolean CQ.\newline
 A useful tool in this project is the correspondence between Boolean CQs and databases:
 \begin{itemize}
@@ -254,14 +241,14 @@ A useful tool in this project is the correspondence between Boolean CQs and data
 \subsection{2.6. Forward Chaining: The Chase}
 One common technique for dealing with the open world query answering problem is to derive, given an initial instance D$_{0}$ and set of constraints $\Sigma$, the facts that can be implied in all possible worlds.\newline
 Given the TGD $\varphi$ we defined at (1), a \textit{trigger} for $\varphi$ is a  homomorphism h of $\rho$($\vec{x}$, $\vec{y}$) into D$_{0}$. Intuitively, a trigger is simply an assignment of $\vec{x}$ and $\vec{y}$ to values in Adom(D$_{0}$) such that $\rho(\vec{x},$ $\vec{y})$ holds in D$_{0}$. We say that the trigger is \textit{active} if there is no witness $\vec{z}$ such that $\gamma$($\vec{y}$, $\vec{z}$) holds in D$_{0}$, which means that the TGD constraint is not yet satisfied by D$_{0}$.\newline
-In order to derive a world where $\varphi$ is satisfied, we create \textbf{new} constants (known as \textit{labelled nulls}) for $\vec{z}$ and we append the necessary facts to D$_{0}$, in order to have a witness for $\gamma$($\vec{y}$, $\vec{z}$). We call this process a \textit{chase step}, and the resulting super-instance will no longer have h as an active constraint. In order to obtain a super-instance which satisfies all constraints from $\Sigma$, we start from D$_{0}$ and make a chase step until there are no active triggers. This procedure will lead to a sequence of instances D$_{0}$, D$_{1}$, ..., D$_{n}$, ..., where each D$_{i+1}$ is obtained from D$_{i}$ by performing a chase step. This is called a \textit{chase sequence} and it can be \textit{terminating} if it is finite and the final instance has no active triggers, otherwise it is \textit{non-terminating}.\newline
+In order to derive a world where $\varphi$ is satisfied, we create \textbf{new} constants (known as \textit{labelled nulls}) for $\vec{z}$ and we append the necessary facts to D$_{0}$, in order to have a witness for $\gamma$($\vec{y}$, $\vec{z}$). We call this process a \textit{chase step}, and the resulting super-instance will no longer have h as an active constraint. In order to obtain a super-instance that satisfies all constraints from $\Sigma$, we start from D$_{0}$ and make a chase step until there are no active triggers. This procedure will lead to a sequence of instances D$_{0}$, D$_{1}$, ..., D$_{n}$, ..., where each D$_{i+1}$ is obtained from D$_{i}$ by performing a chase step. This is called a \textit{chase sequence} and it can be \textit{terminating} if it is finite and the final instance has no active triggers, otherwise it is \textit{non-terminating}.\newline
 For efficiency, we can also act in stages, solving multiple active triggers at once:
 \begin{itemize}
 	\item Starting from D$_{0}$, apply (in parallel) a chase step for every active trigger and form a super-instance D$_{1}$;
 	\item Apply (in parallel) a chase step for each active trigger in D$_{k}$ and form a super-instance D$_{k+1}$;
-	\item Continue until there are no active triggers in (say) D$_{n}$
+	\item Continue until there are no active triggers in (say) D$_{n}$.
 \end{itemize}
-This is called a \textit{maximal parallel chase sequence} and we call D$_{n}$ the \textit{parallel chase model}. In case that our process is infinite, we consider as our chase model the direct limit of the structures in it, in our case D$_{0}$, D$_{1}$, ..., D$_{n}$, ..., and we will denote this model as chase$_{\Sigma}$(D$_{0}$).\newline
+This is called a \textit{maximal parallel chase sequence} and we call D$_{n}$ the \textit{parallel chase model}. In case our process is infinite, we consider as chase model the direct limit of the structures in it, in our case D$_{0}$, D$_{1}$, ..., D$_{n}$, ..., and we will denote this model as chase$_{\Sigma}$(D$_{0}$).\newline
 \textbf{Types of chase}: In the literature, there are multiple ways to define chase sequences, depending on which active triggers are picked. We will mention a few:
 \begin{itemize}
 	\item \textbf{oblivious chase}: for every pair ($\vec{a}$, $\vec{b}$) and TGD $\varphi$ of the form from (1) with $\rho(\vec{a},$ $\vec{b})$ $\subseteq$ D$_{0}$, apply a chase step to $\varphi$ only if the same pair has not contributed to any previous chase step; therefore, add to D$_{0}$ a new set of atoms $\gamma$($\vec{b}$, $\vec{c}$), where $\vec{c}$ is a fresh set of labelled nulls;
@@ -269,22 +256,21 @@ This is called a \textit{maximal parallel chase sequence} and we call D$_{n}$ th
 	\item \textbf{super-oblivious chase}: in this variant, we apply chase steps to all matching bodies, no matter if the pair ($\vec{a}$, $\vec{b}$) has been previously used or not.
 \end{itemize}
 All chase methods can create infinite instances, but it is clear that the restricted chase creates the smallest instances out of the three, and the super-oblivious one the largest.\newline
-\textbf{Example 6}: Given the database D$_{0}$ from Example 4 and TGD $\varphi_{2}$, which is not initially satisfied, we can apply one chase step and add a fresh constant null$_{1}$ and the fact S(1, null$_{1}$) to D$_{0}$. Now, the new instance satisfies $\varphi_{2}$ and if we use the restricted or oblivious chase, we would stop here. For the super-oblivious chase, we would add facts S(1, null$_{i}$), for i $\geq$ 1. \newline
+\textbf{Example 6}: Given the database D$_{0}$ from Example 5 and TGD $\varphi_{2}$, which is not initially satisfied, we can apply one chase step and add a fresh constant null$_{1}$ and the fact S(1, null$_{1}$) to D$_{0}$. Now, the new instance satisfies $\varphi_{2}$ and if we use the restricted or oblivious chase, we would stop here. For the super-oblivious chase, we would add facts S(1, null$_{i}$), for i $\geq$ 1. \newline
 \textbf{Properties}: First of all, it is important to notice that the chase procedure will always output a possible world of D$_{0}$ and $\Sigma$, no matter if the procedure is terminating or not. This can easily be deduced from the fact that there will always be a chase step for each active constraint that occurs, which will automatically solve it.\newline
 \textbf{Theorem 2.6.1 (Universality Theorem)}.  Given database instance D$_{0}$ and set of constraints $\Sigma$, chase$_{\Sigma}$(D$_{0}$) is a \textit{universal model} for D$_{0}$ and $\Sigma$, meaning that for any world D$^{'}_{0}$ of D$_{0}$ and $\Sigma$, there exists a homomorphism from chase$_{\Sigma}$(D$_{0}$) to D$^{'}_{0}$. \newline
 One issue with the chase procedure is that for general TGDs, the termination of the algorithm is undecidable. However, even though for guarded TGDs the chase might be non-terminating, we can decide when to "cut" the procedure, because after some point we no longer obtain new facts (only renamings of the variables).\newline
-This crucial theorem will justify the use of the phrase "the chase model", since it implies that for any two chase models, no matter the chase procedure used, there will be a homomorphism between them. Therefore, the chase model is \textit{unique up to homomorphism}. 
+This crucial theorem will justify the use of the phrase "the chase model" since it implies that for any two chase models, no matter the chase procedure used, there will be a homomorphism between them. Therefore, the chase model is \textit{unique up to homomorphism}. 
 The main link to the query answering problem is the following proven result:\newline
 \textbf{Corollary 2.6.2.} Consider a set of TGDs $\Sigma$, any database instance D$_{0}$, the chase model chase$_{\Sigma}$(D$_{0}$) and a set of values Base from D$_{0}$ and $\Sigma$. Then, for any CQ Q using only constants from Base, and any tuple $\vec{t}$ with values in Base:
 \begin{center}
 $\vec{t}$ is a certain answer for Q, D$_{0}$, $\Sigma$ iff $\vec{t}$ is in Q(chase$_{\Sigma}$(D$_{0}$)). 
 \end{center}
 It has been proven that the problem of finding certain answers is undecidable for the general class of TGDs, but for restricted versions (such as guarded TGDs) this problem is decidable even in the non-terminating case.
-\subsection{2.7. Tree-like Property of the Chase}
-\michael{Maybe add "for GTGDs" to the subection title}
+\subsection{2.7. Tree-like Property of the Chase on LTGDs}
 An important result studied in \cite{decidable} is that the chase procedure for GTGDs is "tree-like". We will present how this result works for LTGDs: 
 intuitively, we show that the model can be "coded" as a tree.\newline
-Let us fix source instance D$_{0}$ and set of LTGD constraints $\Sigma$. Let the set of constants from D$_{0}$ be Adom(D$_{0}$) = $\{$c$_{1}$, ..., c$_{n}\}$ and the relation names (R$_{1}$, ..., R$_{m}$). Let N = $\{$n$_{1}$, ..., n$_{i}$, ... $\}$ be the set of labelled nulls that will be used in the chase procedure. We represent the chase model of D$_{0}$ and $\Sigma$ as a labelled $\omega$-tree over a set of predicates which will contain all possible facts, combining relation names R$_{i}$ and arguments from Adom(D$_{0}$) $\cup$ N.\newline
+Let us fix a source instance D$_{0}$ and set of LTGD constraints $\Sigma$. Let the set of constants from D$_{0}$ be Adom(D$_{0}$) = $\{$c$_{1}$, ..., c$_{n}\}$ and the relation names (R$_{1}$, ..., R$_{m}$). Let N = $\{$n$_{1}$, ..., n$_{i}$, ... $\}$ be the set of labelled nulls that will be used in the chase procedure. We represent the chase model of D$_{0}$ and $\Sigma$ as a labelled $\omega$-tree over a set of predicates which will contain all possible facts, combining relation names R$_{i}$ and arguments from Adom(D$_{0}$) $\cup$ N.\newline
 \textbf{Example 7}: Let D$_{0}$ = $\{$R(a,b,c)$\}$ and $\Sigma$ = $\{\forall$x,y,z R(x,y,z) $\rightarrow$ $\exists$t R(y,t,x); $\forall$x,y,z R(x,y,z) $\rightarrow$ $\exists$t S(z,t)$\}$. It is clear that the chase procedure here will be non-terminating, since we will always have a new active trigger for each R-fact that is added.\newline 
 Formally, we can represent the structure as an infinite labelled tree using the following procedure:
 \begin{enumerate}
@@ -350,7 +336,7 @@ squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size
 \end{center}
 The major difference is that if a local name appears in two different nodes that are not connected in the tree, then the two appearances do not represent the same value.\newline
 An important question is what value we should choose for k. Our goal is to minimize its value and consequently the number of possible predicates. As discussed in \cite{decidable}, the optimal value for k is the maximal arity (call it \textit{w}) of any relation in D$_{0}$ or in $\Sigma$.\newline
-We need to have at least k $\geq$ \textit{w}, otherwise, if we encounter two facts R(x$_{1}$, ..., x$_{w}$) and R(y$_{1}$, ..., y$_{w}$), where all values mentioned are distinct, we cannot code the values in a consistent way with only 2k local names. In \cite{decidable} we can see that having k = \textit{w} is actually sufficient for every instance that we will encounter.\newline
+We need to have at least k $\geq$ \textit{w}, otherwise, if we encounter two facts R(x$_{1}$, ..., x$_{w}$) and R(y$_{1}$, ..., y$_{w}$), where all values mentioned are distinct, we cannot code the values in a consistent way with less than 2k local names. In \cite{decidable} we can see that having k = \textit{w} is actually sufficient for every instance that we will encounter.\newline
 A crucial point is that every chase structure for source instance D$_{0}$ and set of LTGDs can be represented using this new signature\footnote{in \cite{decidable}, we can find the definition of \textit{k tree-code signature}, a generalization of what we presented here, which is required for a larger class of FO-formulas, called the \textit{Guarded Fragment}.}. 
 
 \newpage
@@ -438,12 +424,12 @@ squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size
 \end{center}
 where chase$_{\Sigma_{2}}$(D$_{0}$) does not satisfy the second constraint from $\Sigma_{1}$, because of R$_{1}$(n$_{3}$,n$_{4}$).\newline
 \textbf{Q: Under what conditions does CQ-equivalence $\Rightarrow$ Chase compatibility hold?}\newline
-\textbf{Theorem 3.2.1}: Let $\Sigma_{1}$ and $\Sigma_{2}$ be two sets of single-headed\footnote{LTGDs with only one atom in the head : $\forall$ $\vec{x}$,$\vec{y}$ R($\vec{x}$,$\vec{y}$) $\rightarrow$ $\exists$ $\vec{z}$ S($\vec{y}$,$\vec{z}$)} LTGDs with the following properties:
+\textbf{Theorem 3.2.1}: Let $\Sigma_{1}$ and $\Sigma_{2}$ be two sets of single-headed\footnote{LTGDs with only one atom in the head : $\forall$ $\vec{x}$,$\vec{y}$ R($\vec{x}$,$\vec{y}$) $\rightarrow$ $\exists$ $\vec{z}$ S($\vec{y}$,$\vec{z}$).} LTGDs with the following properties:
 \begin{enumerate}
 	\item every constraint mentions only binary predicates;
 	\item the body of each constraint has two distinct universally quantified variables;
 	\item the head of each constraint contains exactly one exported variable and one existential variable;
-	\item the set of constraints does not lead to a chase where there exist a value (constant or labelled null) that appears both in a node and in its grandchild.
+	\item the set of constraints does not lead to a chase where there exists a value (constant or labelled null) that appears both in a node and in its grandchild.
 \end{enumerate}
 Then, if $\Sigma_{1}$ and $\Sigma_{2}$ are CQ-equivalent, then they are also chase compatible.\newline
 \textbf{Proof}: \newline
@@ -461,8 +447,8 @@ We will now argue by contradiction. Suppose that the two sets are CQ-equivalent,
 Let R$_{i}$(a$_{i}$,b$_{i}$) be the fact corresponding to F$_{i}$. We know from the given properties of the constraints that precisely one of a$_{i}$ and b$_{i}$ appears in F$_{i-1}$ and the other one is a fresh null. We can form the canonical query Q of the path from CH$_{2}$, which will have as free variables all constants from D$_{0}$ and k universal variables, one for each fresh null introduced by each fact. The CQ-equivalence between $\Sigma_{1}$ and $\Sigma_{2}$ implies that CH$_{1}$ satisfies Q, which in turn implies the existence of facts F$^{'}_{1}$, F$^{'}_{2}$, ..., F$^{'}_{k-1}$, F$^{'}_{k}$ such that F$^{'}_{i}$ shares exactly one value with F$^{'}_{i-1}$, 1 $\leq$ i $\leq$ k. We only remain to prove that these facts form a path in CH$_{1}$, as the part with the homomorphism is proven by the query satisfaction. We will build this path using strong induction on 0 $<$ i $<$ k:\newline
 \textbf{Base case}: Because of Claim 1, F$^{'}_{1}$ must be a child of D$_{0}$;\newline
 \textbf{Inductive step}: Suppose that F$^{'}_{0}$ = D$_{0}$, F$^{'}_{1}$, F$^{'}_{2}$, ..., F$^{'}_{i-1}$, F$^{'}_{i}$ form a path. Because of Claim 1, F$^{'}_{i+1}$ is either a child of F$^{'}_{i}$, or a child of F$^{'}_{i-1}$, but using the connected subset property for the chase, the latter case will imply that F$^{'}_{i-1}$ contains the value shared between F$^{'}_{i}$ and F$^{'}_{i+1}$, which violates rule 4.\newline
-Therefore, F$^{'}_{k}$ will have a fact of the form R(a',b'). Because $\varphi$ $\in$ $\Sigma_{1}$, the chase procedure guarantees that there exist a child F$^{'}_{k+1}$ of F$^{'}_{k}$ that contains the fact S(b',c'), for a fresh null c'.\newline
-Now, we can use a similar approach for the path from CH$_{1}$ (augmented with F$^{'}_{k+1}$) to create the canonical query Q', which must be satisfied by CH$_{2}$. Analogously to what we did above and using the same reasoning as for Claim 2, there must exist a path F$^{''}_{0}$ = D$_{0}$, F$^{''}_{1}$, F$^{''}_{2}$, ..., F$^{''}_{k-1}$, F$^{''}_{k}$, F$^{''}_{k+1}$ in CH$_{1}$ that is homomorphic (preserving the constants in D$_{0}$) to the path from CH$_{1}$.\newline
+Therefore, F$^{'}_{k}$ will have a fact of the form R(a',b'). Because $\varphi$ $\in$ $\Sigma_{1}$, the chase procedure guarantees that there exists a child F$^{'}_{k+1}$ of F$^{'}_{k}$ that contains the fact S(b',c'), for a fresh null c'.\newline
+Now, we can use a similar approach for the path from CH$_{1}$ (augmented with F$^{'}_{k+1}$) to create the canonical query Q', which must be satisfied by CH$_{2}$. Analogously to what we did above and using the same reasoning as for Claim 2, there must exist a path F$^{''}_{0}$ = D$_{0}$, F$^{''}_{1}$, F$^{''}_{2}$, ..., F$^{''}_{k-1}$, F$^{''}_{k}$, F$^{''}_{k+1}$ in CH$_{2}$ that is homomorphic (preserving the constants in D$_{0}$) to the path from CH$_{1}$.\newline
 Because of this last homomorphism, F$^{''}_{k}$ must have a fact of the form R(a'',b'') and F$^{''}_{k+1}$ a fact of the form S(b'',c''). The chase procedure guarantees that whenever we have a parent-child relationship, the child was created due to a constraint being applied, therefore we must have a constraint of the same form as $\varphi$ in $\Sigma_{2}$, but this leads to a contradiction, as F$_{k}$ could no longer be a witness that $\varphi$ does not hold in CH$_{2}$.\newline
 \begin{center}
 \begin{tikzpicture}[
@@ -541,7 +527,7 @@ In order to prove results for chase compatibility introduced previously, we will
 \textbf{Theorem 4.0.1.} For a fixed instance D$_{0}$, $\Sigma$ a set of single-headed LTGDs and $\varphi$ a single-headed LTGD, we can decide chase$_{\Sigma}$(D$_{0}$) $\vDash$ $\varphi$. \newline
 The approach inspired from \cite{decidable} follows the plan:
 \begin{itemize}
-	\item Show that each such chase structure can be represented by a tree-like model (a structure that can be "coded" in a tree) - Section 2.7;
+	\item Show that each such chase structure can be represented by a tree-like model (a structure that can be "coded" as a tree) - Section 2.7;
 	\item Create an automata that will accept trees that code the given chase structure - Section 4.2;
 	\item Create an automata that will accept only trees that satisfy $\neg \varphi$ - Section 4.4;
 	\item Intersect the two automata and check for non-emptiness - Section 4.5.
@@ -564,9 +550,9 @@ It takes as input an infinite Alph-tree and processes it top-down. A \textit{run
 	\item If a node v labelled with $\tau$ and children v$_{1}$, ..., v$_{n}$ is assigned to state q and we have $\delta$(q, $\tau$) = (q$_{1}$, ..., q$_{n}$), then child i must be assigned to state q$_{i}$, for 1 $\leq$ i $\leq$ n;
 	\item for every path $\pi$ of the tree, there are infinitely many nodes assigned to accepting states. 
 \end{itemize}
-The language of such an automaton is formed from the trees for which there exist a successful run. An important property that will be needed from these automata is that the emptiness problem is decidable in PTIME, as it is done via reachability analysis. This is also true for the 1-way nondeterministic case.
+The language of such an automaton is formed from the trees for which there exists a successful run. An important property that will be needed from these automata is that the emptiness problem is decidable in PTIME, as it is done via reachability analysis. This is also true for the 1-way nondeterministic case.
 \subsection{4.2. Automata for the Chase}
-We will use a 1-way deterministic B$\ddot{u}$chi tree automaton to input tree structures of the form presented at Section 2.7. We fix D$_{0}$, $\Sigma$ and the local names L = $\{$n$_{1}$, ..., n$_{2k}\}$, where k is the maximal arity of any relation name from D$_{0}$ and $\Sigma$. We define the automaton $\mathcal{A}_{chase}$(D$_{0}$, $\Sigma$) that will accept only structures that are homomorphic to chase$_{\Sigma}$(D$_{0}$):
+We will use a 1-way deterministic B$\ddot{u}$chi tree automaton to input tree structures of the form presented in Section 2.7. We fix D$_{0}$, $\Sigma$ and the local names L = $\{$n$_{1}$, ..., n$_{2k}\}$, where k is the maximal arity of any relation name from D$_{0}$ and $\Sigma$. We define the automaton $\mathcal{A}_{chase}$(D$_{0}$, $\Sigma$) that will accept only structures that are homomorphic to chase$_{\Sigma}$(D$_{0}$):
 \begin{itemize}
 	\item Q = $\{$q$_{0}\}$ $\cup$ $\{$q$_{F(t_{1}, ..., t_{arity(F)})}$ $|$ F is a fact from D$_{0}$ or $\Sigma$, t$_{1}$, ..., t$_{arity(F)}$ $\in$ Adom(D$_{0}$) $\cup$ L$\}$ $\cup$ $\{$q$_{Fail}\}$;
 	\item Alph = $\{$D$_{0}\}$ $\cup$ $\{$F(t$_{1}$, ..., t$_{arity(F)}$) $|$ F is a fact from D$_{0}$ or $\Sigma$, t$_{1}$, ..., t$_{arity(F)}$ $\in$ Adom(D$_{0}$) $\cup$ L$\}$;
@@ -575,7 +561,7 @@ We will use a 1-way deterministic B$\ddot{u}$chi tree automaton to input tree st
 	\item F = Q $\setminus$ $\{$q$_{Fail}\}$.
 \end{itemize}
 We created states for each fact that we might see in the coding of a chase structure, and we accept trees based on their structure and labels:\newline
-1) At the root, we expect the label to be D$_{0}$, otherwise we go to a sink state q$_{Fail}$:
+1) At the root, we expect the label to be D$_{0}$, otherwise, we go to a sink state q$_{Fail}$:
 \begin{center}
 \[\delta(q_{0},\tau) = \left\{\begin{array}{lr}
         (q_{F_{1}}, ..., q_{F_{m}}), & \text{if } \tau = D_{0}\\
@@ -583,7 +569,7 @@ We created states for each fact that we might see in the coding of a chase struc
         \end{array}\right\}
   \] 
 \end{center}
-The set of facts $F_{1}$, ..., $F_{m}$ will be all the facts that can be generated from D$_{0}$, by matching the body of a constraint from $\Sigma$. In order to know what local names to expect, we impose a reasonable \textbf{policy} that in choosing a local name for a fresh variable, we always pick the first available local name from L, in the order of the indices. Intuitively, we only allow structures that have at the root the label D$_{0}$, and we then transition to all states that correspond to new facts derived from D$_{0}$ and $\Sigma$ because this is what we expect to see on the next level.\newline
+The set of facts $F_{1}$, ..., $F_{m}$ represents all the facts that can be generated from D$_{0}$, by matching the body of a constraint from $\Sigma$. In order to know what local names to expect, we impose a reasonable \textbf{policy} that in choosing a local name for a fresh variable, we always pick the first available local name from L, in the order of the indices. Intuitively, we only allow structures that have at the root the label D$_{0}$, and we then transition to all states that correspond to new facts derived from D$_{0}$ and $\Sigma$ because this is what we expect to see on the next level.\newline
 2) At the "chase states" q$_{F}$ (the ones that are neither q$_{0}$, nor q$_{Fail}$), we analogously to 1) define the set of new facts that should be generated from matching constraints in $\Sigma$ with the body F, call it $\Sigma_{F}$ = $\{$F$_{1}$, ..., F$_{k}\}$, again using the defined \textbf{policy}:
 \begin{center}
 \[\delta(q_{F},\tau) = \left\{\begin{array}{lr}
@@ -596,15 +582,15 @@ The set of facts $F_{1}$, ..., $F_{m}$ will be all the facts that can be generat
 \begin{center}
 $\delta(q_{Fail},\tau) = (q_{Fail})$ 
 \end{center}
-This automaton accepts structures isomorphic to chase$_{\Sigma}$(D$_{0}$), because each state hard-codes the expected labels that we require. However, because of the \textbf{policy} that we imposed in order to reduce the transition space, we will not accept all structures that are isomorphic to the chase, but there will exist one that is accepted.
+This automaton accepts structures isomorphic to chase$_{\Sigma}$(D$_{0}$) because each state hard-codes the expected labels that we require. However, because of the \textbf{policy} that we imposed in order to reduce the transition space, we will not accept all structures that are isomorphic to the chase, but there will exist one that is accepted.
 
 \subsection{4.3. Automata over Infinite Trees: 2-way alternating Buchi}
 For the second part of the proof, we will require a more powerful automaton, which will have more flexibility in terms of searching over its input trees. \newline
 In order to decide whether a structure satisfies a single-headed LTGD, we have existential states that decide that a particular fact holds for at least one tuple and we also have universal states to decide if a particular fact holds for all possible tuples. This motivates the use of an alternating automaton.\newline
-Besides that, in the chase case we only traversed the input tree top-down, since only the last level of nodes was involved in the creation of new ones. However, in this case we are interested in traversing nodes in all directions, because we might find facts in other branches that have an impact in our decision. This motivates the use of a 2-way automaton (augmented with actions from Direction$_{r}$ = $\{$Stay, Up$\}$ $\cup$ $\{$Down$_{i}$ $|$ 1 $\leq$ i $\leq$ r$\}$). \newline
+Besides that, in the chase case, we only traversed the input tree top-down, since only the last level of nodes was involved in the creation of new ones. However, in this case, we are interested in traversing nodes in all directions, because we might find facts in other branches that have an impact on our decision. This motivates the use of a 2-way automaton (augmented with actions from Direction$_{r}$ = $\{$Stay, Up$\}$ $\cup$ $\{$Down$_{i}$ $|$ 1 $\leq$ i $\leq$ r$\}$). \newline
 Our transition function assigns pairs of states and labels to \textbf{positive boolean combinations of propositions over Direction$_{r}$ $\times$ Q}. Intuitively, a transition to:
 \begin{itemize}
-	\item (dir, q) will tell the automaton to go in direction dir in the input tree and transition to state q (base case);
+	\item (dir, q) will tell the automaton to go in the direction dir in the input tree and transition to state q (base case);
 	\item $\sigma_{1}$ $\wedge$ $\sigma_{2}$ implies a universal choice, so both $\sigma_{1}$ and $\sigma_{2}$ need to happen;
 	\item  $\sigma_{1}$ $\vee$ $\sigma_{2}$ suggests an existential choice, so at least one of $\sigma_{1}$ and $\sigma_{2}$ needs to happen.
 \end{itemize}
@@ -617,7 +603,7 @@ As in \cite{decidable}, the set of positive boolean combinations of propositions
 	\item q$_{0}$ $\in$ Q is the \textit{initial} state;
 	\item F $\subseteq$ Q is the set of \textit{final} states.
 \end{itemize}
-The details for a \textit{run} and for an \textit{accepting run} are explained in detail in \cite{decidable} and are an extension of the conditions from the 1-way deterministic case. The crucial part is that we require the node-child relationship to obey the transition relation, as before. As we did with the 1-way deterministic case, we are interested in the decidability of the non-emptiness problem, and for this type of automaton it has been proven that the problem is decidable in EXPTIME (in the number of states of the automaton).
+The details for a \textit{run} and for an \textit{accepting run} are explained in detail in \cite{decidable} and are an extension of the conditions from the 1-way deterministic case. The crucial part is that we require the node-child relationship to obey the transition relation, as before. As we did with the 1-way deterministic case, we are interested in the decidability of the non-emptiness problem, and for this type of automaton, it has been proven that the problem is decidable in EXPTIME (in the number of states of the automaton).
 
 \subsection{4.4. Automata for single-headed LTGDs}
 Our goal is to create an automaton $\mathcal{A}_{\neg \varphi}$ that accepts all tree code chase structures where $\neg \varphi$ holds. For consistency, we will stick to the vocabulary defined at the previous section. \newline
@@ -648,7 +634,7 @@ $\delta(q_{False}, \tau) = (Stay, q_{False})$
 In order for $\neg \varphi$ to be satisfied by one of our coded structures, we will traverse the tree on nodes until we find a node where we can guess that the given pair is ($\vec{a}$, $\vec{b}$), since the node is labelled with R($\vec{a}$, $\vec{b}$). After this guess, we want to show that $\forall \vec{z} \hspace{0.25em} \neg S(\vec{b}, \hspace{0.25em} \vec{z})$ holds in the tree structure. Starting from the node where we made the guess, we search for $\vec{b}$ in the tree and we have three cases:
 \begin{enumerate}
 	\item If $\vec{b}$ is represented by the node and we have the label S($\vec{b}$, $\vec{c}$), for some $\vec{c}$, then we fail, and our guess is wrong;
-	\item If no element from $\vec{b}$ is present in the tuple corresponding to the node, then we can accept, since if we keep searching for $\vec{b}$  from here, we will either go back to already visited nodes, or reach nodes where no element in $\vec{b}$ is represented; this can be explained with the connect subset property of the tree chase structures;
+	\item If no element from $\vec{b}$ is present in the tuple corresponding to the node, then we can accept since if we keep searching for $\vec{b}$  from here, we will either go back to already visited nodes or reach nodes where no element in $\vec{b}$ is represented; this can be explained with the connected subset property of the tree chase structures;
 	\item If some elements from $\vec{b}$ are present, we recurse on each direction of the tree.
 \end{enumerate}
 
@@ -659,13 +645,13 @@ Let d be the cardinality of Adom(D$_{0}$) and \textit{w} be the maximal arity. W
 \subsection{4.6. Relation to Chase Compatibility}
 So far we proved that we can decide for a fixed D$_{0}$ the condition from the definition of chase compatibility, by applying Theorem 4.0.1. However, there are infinitely many possible instances. In order to overcome this issue, we claim:\newline
 \textbf{Proposition 4.6.1}: If for all single-fact instances D$_{0}$ we have that chase$_{\Sigma_{1}}$(D$_{0}$) $\vDash$ $\Sigma_{2}$ and chase$_{\Sigma_{2}}$(D$_{0}$) $\vDash$ $\Sigma_{1}$, then $\Sigma_{1}$ and $\Sigma_{2}$ are chase compatible.\newline
-\textbf{Proof}: Suppose the contrary, for instance that chase$_{\Sigma_{1}}$(D$_{0}$) $\nvDash$ $varphi$, for $\varphi$ $\in$ $\Sigma_{2}$. Then, there is an witness atom that matches the body of $\varphi$ such that no corresponding head exists. This atom was obtained from one fact F$_{0}$ from D$_{0}$ because of the nature of LTGDs, therefore we will also have that chase$_{\Sigma_{1}}$(F$_{0}$) $\nvDash$ $\varphi$. \newline
+\textbf{Proof}: Suppose the contrary, for instance that chase$_{\Sigma_{1}}$(D$_{0}$) $\nvDash$ $\varphi$, for $\varphi$ $\in$ $\Sigma_{2}$. Then, there is an witness atom that matches the body of $\varphi$ such that no corresponding head exists. This atom was obtained from one fact F$_{0}$ from D$_{0}$ because of the nature of LTGDs, therefore we will also have that chase$_{\Sigma_{1}}$(F$_{0}$) $\nvDash$ $\varphi$. \newline
 This result means that we only need to check chase compatibility of finitely many instances, which makes chase compatibility decidable in 2EXPTIME.
 
 \newpage
 
-\section{5. Weaker notions of CQ-equivalence}
-The goal of this section is to study the decidability of CQ-equivalence into more detail.
+\section{5. CQ-equivalence}
+The goal of this section is to study the decidability of CQ-equivalence into more detail, particularly for less general versions where we impose a fixed (finite) size for instances and CQs.
 \subsection{5.1. Query entailment for the chase}
 Let us fix a source instance D$_{0}$ and a set of LTGDs $\Sigma$. Let M = chase$_{\Sigma}$(D$_{0}$) and we will use the notation M$_{k}$ to represent the substructure of M such that in the tree representation of M presented at Section 2.7, we chop off the subtrees of M of depth bigger than k.\newline
 \textbf{Definition 5.1.1}: Two atoms of the form R(c$_{1}$ ... c$_{n}$) and R$^{'}$(c$^{'}_{1}$ ... c$^{'}_{n}$) are \textit{similar} with respect to D$_{0}$ if
@@ -678,10 +664,10 @@ Intuitively, there is a renaming for the non-constant terms in one atom that lea
 \textbf{Observation 5.1.2}: If two nodes from M are similar, then their subtrees are isomorphic.\newline
 This holds because the isomorphism between the two subtrees is determined by the isomorphism between the two nodes. Additionally, the same rules will be applied to corresponding nodes.\newline
 \textbf{Observation 5.1.3}: For a sufficiently large k, every path of size k in M will contain two nodes that are similar with respect to D$_{0}$.\newline
-The proof of this relies on the fact that there are finitely many "similarity types", meaning that if we start with a set containing an atom R(c$_{1}$, ..., c$_{n}$) that uses constants from Adom(D$_{0}$) and local names, we can only add finitely many new atoms to the set until two of them will be similar. This bound k on the set of dissimilar facts will be exponential in the maximal arity of a relation from D$_{0}$ (called it \textit{w} before). Therefore, if we have a path longer than k in the tree, by the Pigeonhole Principle we will encounter two similar nodes.\newline
-\textbf{Proposition 5.1.4}: If a Boolean CQ Q is entailed by M, there there exists an integer k such that Q holds in M$_{k}$. This integer k will be exponential in the sizes of Q and D$_{0}$.\newline
-\textbf{Proof}: We will begin with the proof for Q constituting of a single atom. We claim that if we choose the k from Observation 5.1.3, we will obtain in M$_{k}$ all atoms that can be entailed by M. This holds as if we allow a path longer than k, we will encounter two similar nodes, and by Observation 5.1.2 the subtree coming from the nodes that follows later in the path will be isomorphic to the one from the node that comes earlier, so there will be no new atom in the subtree after this later node. Therefore, we can decide if Q holds in M by checking if the single atom in Q appears in any node from M$_{k}$.\newline
-For the proof where Q has a number of q $>$ 1 atoms, let S$_{Q}$ be a witness to that i.e. a set of q atoms in M and let h$_{Q}$ be the corresponding homomorphism of Q into S$_{Q}$. We define the \textit{closure} of S$_{Q}$ in the tree structure cl(S$_{Q}$) to be formed by closing S$_{Q}$ under least common ancestors. Our goal will be to truncate cl(S$_{Q}$) in a similar way as for the single-atom case. We say that two elements in cl(S$_{Q}$) are \textit{neighbors} if there is no element from S$_{Q}$ in the path between them. We will repeat the following process:
+The proof of this relies on the fact that there are finitely many "similarity types", meaning that if we start with a set containing an atom R(c$_{1}$, ..., c$_{n}$) that uses constants from Adom(D$_{0}$) and local names, we can only add finitely many new atoms to the set until two of them will be similar. This bound k on the set of dissimilar facts will be exponential in the maximal arity of relations from D$_{0}$ (called it \textit{w} before). Therefore, if we have a path longer than k in the tree, by the Pigeonhole Principle we will encounter two similar nodes.\newline
+\textbf{Proposition 5.1.4}: If a Boolean CQ Q is entailed by M, then there exists an integer k such that Q holds in M$_{k}$. This integer k will be exponential in the sizes of Q and D$_{0}$.\newline
+\textbf{Proof}: We will begin with the proof for Q constituting of a single atom. We claim that if we choose the k from Observation 5.1.3, we will obtain in M$_{k}$ all atoms that can be entailed by M. This holds as if we allow a path longer than k, we will encounter two similar nodes, and by Observation 5.1.2 the subtree coming from the node that follows later in the path will be isomorphic to the one from the node that comes earlier, so there will be no new atom in the subtree after this later node. Therefore, we can decide if Q holds in M by checking if the single atom in Q appears in any node from M$_{k}$.\newline
+For the proof where Q has a number of q $>$ 1 atoms, let S$_{Q}$ be a witness to that i.e. a set of q atoms in M, and let h$_{Q}$ be the corresponding homomorphism of Q into S$_{Q}$. We define the \textit{closure} of S$_{Q}$ in the tree structure cl(S$_{Q}$) to be formed by closing S$_{Q}$ under least common ancestors. Our goal will be to truncate cl(S$_{Q}$) in a similar way as for the single-atom case. We say that two elements in cl(S$_{Q}$) are \textit{neighbors} if there is no element from S$_{Q}$ in the path between them. We will repeat the following process:
 \begin{enumerate}
 	\item Find two neighbors n$_{1}$ and n$_{2}$ (n$_{1}$ ancestor of n$_{2}$) such that there exists two distinct nodes c$_{1}$ and c$_{2}$ along their path that are similar with respect to the elements from the fact of n$_{1}$;
 	\item Replace every node from S$_{Q}$ that comes after c$_{2}$ with the corresponding node that comes after c$_{1}$ to obtain a set S$^{'}_{Q}$ with homomorphism h$^{'}_{Q}$;
@@ -754,7 +740,7 @@ The project has largely achieved the desired goals outlined in the project descr
 \subsection{6.2. Related work}
 The closest reference to what is discussed in this project is \cite{equivalence}, which analyses the decidability of the equivalence types defined in Section 3.1 (without the new ones). Another closely related work comes from \cite{theory}.
 \subsection{6.3. Future directions}
-One extension for the decidability results for would be to relax the constraints imposed on the class of dependencies that we work with. It would be challenging to also generalize the use of automata in Section 4.4 for multi-headed LTGDs. Another question would be about the necessity of all the rules imposed in Theorem 3.2.1.
+One extension for the decidability results would be to relax the constraints imposed on the class of dependencies that we work with, for instance, we could work with GTGDs. It would also be challenging to generalize the use of automata in Section 4.4 for multi-headed LTGDs, since matching the head of the negation of the constraint will involve a more complicated transition function. Another question would be about the necessity of all the rules imposed in Theorem 3.2.1, in particular the one about nodes at distance 2.
 
 \newpage
 
@@ -785,7 +771,7 @@ Ronald Fagin, Phokion Kolaitis, Alan Nash
 , Lucian Popa. \emph{\href{https://www.researchgate.net/publication/221559365_Towards_a_theory_of_schema-mapping_optimization}{Towards a theory of schema-mapping optimization}}.
 
 \bibitem{trigger}
-Efthymia Tsamoura, David Carral, Enrico Malizia, Jacopo Urbani.\emph{\href{http://www.vldb.org/pvldb/vol14/p943-tsamoura.pdf}{Materializing Knowledge Bases via Trigger Graphs}}.
+Efthymia Tsamoura, David Carral, Enrico Malizia, Jacopo Urbani. \emph{\href{http://www.vldb.org/pvldb/vol14/p943-tsamoura.pdf}{Materializing Knowledge Bases via Trigger Graphs}}.
 
 \end{thebibliography}
 
